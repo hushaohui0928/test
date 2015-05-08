@@ -1,0 +1,230 @@
+程序源代码（部分）：
+Book类：
+package bean;
+
+public class book {
+	private int id;
+	private String bookName;
+	private String author;//作者
+	private String type;
+	private int number;
+	public String getAuthor() {
+		return author;
+	}
+	public void setAuthor(String author) {
+		this.author = author;
+	}
+	public String getBookName() {
+		return bookName;
+	}
+	public void setBookName(String bookName) {
+		this.bookName = bookName;
+	}
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public int getNumber() {
+		return number;
+	}
+	public void setNumber(int number) {
+		this.number = number;
+	}
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
+	}
+	
+	
+	
+}
+Borrow类：
+package bean;
+
+public class borrow {
+	private int id;
+	private String bookName;
+	private String userName;
+	private String time;
+	private String bookStatic;//借阅状态（借阅中，已归还）
+	public String getBookName() {
+		return bookName;
+	}
+	public void setBookName(String bookName) {
+		this.bookName = bookName;
+	}
+	public String getBookStatic() {
+		return bookStatic;
+	}
+	public void setBookStatic(String bookStatic) {
+		this.bookStatic = bookStatic;
+	}
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public String getTime() {
+		return time;
+	}
+	public void setTime(String time) {
+		this.time = time;
+	}
+	public String getUserName() {
+		return userName;
+	}
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+	
+	
+}
+
+book-main类：
+package main;
+import java.util.ArrayList;
+import java.util.Scanner;
+
+import bean.book;
+public class bookmain {
+public void setbook(ArrayList bolist){
+System.out.println("请依次填写所要添加书籍的  编号 书名 作者 类型 数量");
+Scanner sc=new Scanner(System.in);
+book bo=new book();
+bo.setId(sc.nextInt());
+bo.setBookName(sc.next());
+bo.setAuthor(sc.next());
+bo.setType(sc.next());
+bo.setNumber(sc.nextInt());
+bolist.add(bo);
+System.out.println("添加成功");
+}
+public void findbook(ArrayList bolist){
+System.out.println("请输入要查询的书名");
+System.out.println("书籍编号      名称      作者      类型      数量");
+Scanner sc=new Scanner(System.in);
+String bookName=sc.next();
+for(int i=0;i<bolist.size();i++){
+book bo=(book)bolist.get(i);
+if(bo.getBookName().equals(sc.next())){
+System.out.println(bo.getId()+"      "+bo.getBookName()+"       "+
+						bo.getAuthor()+"       "+bo.getType()+"         "+
+						bo.getNumber());
+}
+}
+}
+public void show(ArrayList bolist){
+System.out.println("书籍编号      名称      作者      类型      数量");	
+for(int i=0;i<bolist.size();i++){
+book bo=(book)bolist.get(i);
+
+System.out.println(bo.getId()+"      "+bo.getBookName()+"       "+
+						bo.getAuthor()+"       "+bo.getType()+"         "+
+						bo.getNumber());
+
+}
+}
+
+}
+bookManagermain类：
+package main;
+
+import java.util.ArrayList;
+import java.util.Scanner;
+
+
+
+public class bookManagermain {
+public static void main(String[] args){
+System.out.println("》》》》》》欢迎来到图书管理系统《《《《《《");
+ArrayList bolist=new ArrayList();
+ArrayList owlist=new ArrayList();
+
+while(true){
+System.out.println("请选择您将要进行的操作");	
+System.out.println("1，添加书籍   2，搜索书籍   3，查看图书");	
+System.out.println("4，借阅书籍   5，归还书籍   6，查看借阅信息   7，退出");
+Scanner sc=new Scanner(System.in);
+int a=sc.nextInt();
+	if(a==1){
+	bookmain bm=new bookmain();
+	bm.setbook(bolist);
+	}else if(a==2){
+	bookmain bm=new bookmain();
+	bm.findbook(bolist);	
+	}else if(a==3){
+	bookmain bm=new bookmain();
+	bm.show(bolist);
+	}else if(a==4){
+	borrowmain bm=new borrowmain();
+	bm.add(owlist, bolist);
+	}else if(a==5){
+	borrowmain bm=new borrowmain();	
+	bm.Return(owlist, bolist);
+	}else if(a==6){
+	borrowmain bm=new borrowmain();	
+	bm.show(owlist);
+	}else {
+	break;	
+	}
+}
+}
+}
+Borrow-main类：
+package main;
+import java.util.ArrayList;
+import java.util.Scanner;
+
+import bean.book;
+import bean.borrow;
+public class borrowmain {
+	public void add(ArrayList owlist,ArrayList bolist){
+	System.out.println("请输入   编号  书名  姓名  时间");
+	borrow bo=new borrow();
+	Scanner sc=new Scanner(System.in);
+	bo.setId(sc.nextInt());
+	bo.setBookName(sc.next());
+	bo.setUserName(sc.next());
+	bo.setTime(sc.next());
+	owlist.add(bo);
+	bo.setBookStatic("借阅中");
+	for(int i=0;i<bolist.size();i++){
+	book boo=(book)bolist.get(i);
+	if(boo.getBookName().equals(sc.next())){
+	boo.setNumber(boo.getNumber()-1);
+	System.out.println("借阅成功");
+	}
+	}
+	}
+	public void show(ArrayList owlist){
+	System.out.println("编号          书名          姓名          时间          状态");
+	for(int i=0;i<owlist.size();i++){
+	borrow bo=(borrow)owlist.get(i);
+	System.out.println(bo.getId()+"          "+bo.getBookName()+"          "+bo.getUserName()+"          "+bo.getTime()+"          "+bo.getBookStatic());
+	}
+	}
+	public void Return(ArrayList owlist,ArrayList bolist){
+	System.out.println("请输入 书名 ");	
+	Scanner sc= new Scanner(System.in);
+	System.out.println("编号          书名          姓名          时间          状态");
+	for (int i=0;i<owlist.size();i++){
+		borrow bo=(borrow)owlist.get(i);
+		if(bo.getBookName().equals(sc.next())){
+		System.out.println(bo.getId()+"          "+bo.getBookName()+"          "+bo.getUserName()+"          "+bo.getTime()+"          "+bo.getBookStatic());
+		}
+		
+		}
+	for (int i=0;i<bolist.size();i++){
+	book bo=(book)bolist.get(i);
+	if(bo.getBookName().equals(sc.next())){
+	bo.setNumber(bo.getNumber()+1);
+	System.out.println("归还成功");
+	}
+	}
+	}
+}
